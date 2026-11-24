@@ -1,48 +1,32 @@
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import model.Customer;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
  
-public class LoginView {
+public class LoginController {
  
-    public void show(Stage stage) {
+    private Customer customer;
  
-        Label title = new Label("BANKING SYSTEM");
- 
-        Label usernameLabel = new Label("Username");
-        TextField usernameField = new TextField();
- 
-        Label passwordLabel = new Label("Password");
-        PasswordField passwordField = new PasswordField();
- 
-        Button loginButton = new Button("Login");
- 
-        loginButton.setOnAction(event -> {
-            LoginController controller = new LoginController();
-            controller.login(
-                stage,
-                usernameField.getText(),
-                passwordField.getText()
-            );
-        });
- 
-        VBox layout = new VBox(12);
-        layout.setPadding(new Insets(25));
- 
-        layout.getChildren().addAll(
-            title,
-            usernameLabel,
-            usernameField,
-            passwordLabel,
-            passwordField,
-            loginButton
+    public LoginController() {
+        customer = new Customer(
+            "C001",
+            "Abi",
+            "Test",
+            "Gaborone",
+            "abi@mail.com",
+            "1234"
         );
- 
-        Scene scene = new Scene(layout, 400, 350);
- 
-        stage.setTitle("Banking System - Login");
-        stage.setScene(scene);
-        stage.show();
     }
-}
+ 
+    public void login(Stage stage, String email, String password) {
+ 
+        if (customer.login(email, password)) {
+            AccountView accountView = new AccountView();
+            accountView.show(stage);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Incorrect email or password.");
+            alert.showAndWait();
+        }
+    }
